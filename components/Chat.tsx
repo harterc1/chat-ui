@@ -2,6 +2,9 @@ import { startTransition, useState } from "react"
 import { Button, FlatList, KeyboardAvoidingView, Platform, PlatformColor, StyleSheet, Text, TextInput, View } from "react-native"
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 
+import useChat from "@/hooks/useChat"
+
+
 /**
  * Data Model:
  * 
@@ -28,10 +31,14 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 
 const Chat = () => {
 
+  const chatId = 0
   const insets = useSafeAreaInsets()
 
   const [text, setText] = useState<string>("")
-  const [messages, setMessages] = useState<string[]>([])
+  // const [messages, setMessages] = useState<Message[]>(chatService.fetchMessages({ chatId }))
+
+
+  const messages = useChat(chatId);
 
   const onPressCancel = () => {
     setText("")
@@ -40,7 +47,8 @@ const Chat = () => {
   const onPressSend = () => {
     const strippedText = text.trim()
     if (strippedText) {
-      setMessages([text, ...messages]) 
+      // chatService.send({ chatId, text: strippedText })
+      // setMessages([text, ...messages]) 
     }
     setText("")
   }
@@ -54,8 +62,8 @@ const Chat = () => {
       <FlatList
         style={{flex: 1}}
         data={messages}
-        renderItem={({item}) => <Text>{ item }</Text>}
-        keyExtractor={(item) => item}
+        renderItem={({item}) => <Text>{ item.text }</Text>}
+        keyExtractor={(item) => item.id}
         inverted
       />
       <View style={{ padding: 16, paddingBottom: insets.bottom }}>
