@@ -1,8 +1,9 @@
 import { Message } from "@/types.chat"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 import chatService from "@/services/ChatService"
 import useInterval from "./useInterval"
+import useAuthContext from "@/contexts/auth/useAuthContext"
 
 type MessageWithIndex = {
   message: Message
@@ -17,7 +18,7 @@ const getMessageWithIndex = (message: Message, prevMessage?: MessageWithIndex): 
   return { message, indexWithinGroup }
 }
 
-const convertToMessagesWithIndices = (messages: Message[], prevMessages: MessageWithIndex[]) : MessageWithIndex[] => {
+const getMessagesWithIndices = (messages: Message[], prevMessages: MessageWithIndex[]) : MessageWithIndex[] => {
   let prevMessage = prevMessages[0]
   let newMessages: MessageWithIndex[] = []
   messages.forEach((message: Message) => {
@@ -27,9 +28,17 @@ const convertToMessagesWithIndices = (messages: Message[], prevMessages: Message
   return newMessages
 }
 
-const useChat = (chatId: number) => {
+type UseChatReturn = {
+  messages: MessageWithIndex[],
+  send: (text: string) => void
+}
+
+const useChat = (chatId: number): UseChatReturn => {
+
+  const user = useAuthContext()
+
   const [messages, setMessages] = useState<MessageWithIndex[]>(
-    convertToMessagesWithIndices(
+    getMessagesWithIndices(
       chatService.fetchAllMessages({ chatId }),
       [],
     )
@@ -38,7 +47,7 @@ const useChat = (chatId: number) => {
 
   useEffect(() => {
     const onMessage = ({ chatId: messageChatId, message }: {chatId: number, message: Message}) => {
-      if (messageChatId === chatId) {
+      if (messageChatId === chatId && user?.username !== message.user.username) {
         messageQueue.current.push(message)
       }
     }
@@ -51,13 +60,28 @@ const useChat = (chatId: number) => {
 
   useInterval(() => {
     if (messageQueue.current.length) {
-      const newMessages = convertToMessagesWithIndices(messageQueue.current, messages)
+      const newMessages = getMessagesWithIndices(messageQueue.current, messages)
       setMessages([...newMessages, ...messages])
       messageQueue.current = []
     }
   }, 1000)
 
-  return messages
+  const send = useCallback((text: string) => {
+    console.log("sending", text, "as", user)
+    if (!user) { return }
+
+    const message = chatService.createMessage({ user, text })
+
+    // Immediately update state so user has instant feedback
+    setMessages([
+      getMessageWithIndex(message, messages[0]),
+      ...messages,
+    ])
+
+    chatService.send({ message, chatId })
+  }, [user, chatId, messages])
+
+  return { send, messages }
 }
 
 export default useChat

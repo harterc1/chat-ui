@@ -14,5 +14,5 @@ export const extractImageUrls = async (text: string): Promise<string[]> => {
     }
   }))
 
-  return urls.filter((url, index) => contentTypes[index]?.startsWith("image"))
+  return urls.filter((_, index) => contentTypes[index]?.startsWith("image"))
 }

@@ -1,20 +1,34 @@
 import { User, Chat, Message } from "@/types.chat"
 import EventEmitter from "eventemitter3"
-import uuid from 'react-native-uuid';
+import uuid from "react-native-uuid";
 
-class ChatService extends EventEmitter {
+type MessageEventHandler = (payload: {
+  chatId: number,
+  message: Message
+}) => void
+
+type EventTypes = {
+  message: MessageEventHandler
+}
+
+class ChatService extends EventEmitter<EventTypes> {
   #chats: Record<string, Chat> = {0: { messages: [], }}
 
-  send = ({ user, chatId, text }: { user: User, chatId: number, text: string }) => {
+  createMessage = ({ user, text }: { user: User, text: string }): Message => ({
+    id: String(uuid.v4()),
+    user,
+    text,
+    dateCreated: new Date,
+  })
+
+  // send = ({ user, chatId, text }: { user: User, chatId: number, text: string }) => {
+  //   const message = this.createMessage({ user, text })
+  //   this.send({ chatId, message })
+  // }
+
+  send = ({ chatId, message }: { chatId: number, message: Message }) => {
     const chat = this.#chats[chatId]
     if (chat) {
-      // console.log(`sending message ${text} to chat ${chatId}...`)
-      const message = {
-        id: String(uuid.v4()),
-        user,
-        text,
-        dateCreated: new Date,
-      }
       chat.messages.push(message)
       this.emit("message", { chatId, message })
     }

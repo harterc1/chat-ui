@@ -1,71 +1,29 @@
-import { startTransition, useState } from "react"
-import { Button, FlatList, KeyboardAvoidingView, Platform, PlatformColor, StyleSheet, Text, TextInput, View } from "react-native"
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
+import { useState } from "react"
+import { Button, FlatList, KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import useChat from "@/hooks/useChat"
 import MessageView from "./Message"
 
-
-/**
- * Data Model:
- * 
- * User: {
- *  username,
- *  avatar
- * }
- * 
- * Message: {
- *  user: User,
- *  dateCreated: Date,
- *  text: string
- * }
- * 
- * Chat: {
- *  threadMessage: Message?,
- *  messageGroups: MessageGroup[],
- * }
- * 
- * MessageGroup {
- *  messages: Message[]
- * }
- */
-
-/**
- * 
- const uploadAll = async () => {
-    return await Promise.all(sizes.map(async (size, index) => {
-      return await upload(size, index);
-    }));
-  };
- */
-
 const Chat = () => {
 
-  const chatId = 0
   const insets = useSafeAreaInsets()
 
+  // TODO: store text in useRef -- check performance
+  // TODO: move text state to footer
   const [text, setText] = useState<string>("")
-  // const [messages, setMessages] = useState<Message[]>(chatService.fetchMessages({ chatId }))
 
-
-  const messages = useChat(chatId);
+  const { send, messages} = useChat(0);
 
   const onPressCancel = () => {
-    const strippedText = text.trim()
-
-    console.log("found image urls", extractImageUrls(strippedText))
     setText("")
   }
 
   const onPressSend = () => {
     const strippedText = text.trim()
-
-    console.log("found image urls", extractImageUrls(strippedText))
-
-
     if (strippedText) {
-      // chatService.send({ chatId, text: strippedText })
-      // setMessages([text, ...messages]) 
+      console.log("sending", strippedText)
+      send(strippedText)
     }
     setText("")
   }
@@ -73,7 +31,7 @@ const Chat = () => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.select({ios: "padding" })}
+      behavior={Platform.select({ ios: "padding" })}
       keyboardVerticalOffset={insets.bottom + 50}
     >
       <FlatList
