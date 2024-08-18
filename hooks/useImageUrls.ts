@@ -1,4 +1,4 @@
-import { extractImageUrls } from "@/app/utils"
+import { extractImageUrls } from "@/utils"
 import { useEffect, useState } from "react"
 
 const useImageUrls = (text: string): string[] => {

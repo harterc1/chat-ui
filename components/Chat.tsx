@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { startTransition, useRef, useState } from "react"
 import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -15,9 +15,7 @@ const Chat = () => {
 
   const { send, messages} = useChat(0);
 
-  const [pressedMessage, setPressedMessage] = useState<Message | null>(null)
-
-  const handleScrollBeginDrag = () => setPressedMessage(null)
+  const [pressedMessageId, setPressedMessageId] = useState<string | null>(null)
 
   const handleSubmit = (text: string) => {
     send(text)
@@ -25,15 +23,15 @@ const Chat = () => {
   }
 
   const handlePressMessage = (message: Message, index: number) => {
-    if (message.id !== pressedMessage?.id) {
-      setPressedMessage(null)
+    if (message.id !== pressedMessageId) {
+      setPressedMessageId(null)
     }
   }
 
   const handleLongPressMessage = (message: Message, index: number) => {
-    if (message.id !== pressedMessage?.id) {
+    if (message.id !== pressedMessageId) {
       Haptics.selectionAsync()
-      setPressedMessage(message)
+      setPressedMessageId(message.id)
     }
   }
 
@@ -44,7 +42,7 @@ const Chat = () => {
       index={index}
       message={item.message}
       showHeader={item.indexWithinGroup === 0}
-      showOverlay={pressedMessage?.id === item.message.id}
+      showOverlay={pressedMessageId === item.message.id}
     />
   )
 
@@ -60,8 +58,7 @@ const Chat = () => {
         data={messages}
         renderItem={renderItem}
         keyExtractor={(item) => item.message.id}
-        inverted 
-        onScrollBeginDrag={handleScrollBeginDrag}
+        inverted
       />
       <View style={{ paddingTop: 16, paddingBottom: insets.bottom + 16 }}>
         <MessageForm onSubmit={handleSubmit} />

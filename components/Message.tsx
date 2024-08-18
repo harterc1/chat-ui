@@ -5,7 +5,6 @@ import useImageUrls from "@/hooks/useImageUrls"
 import Image from "./Image"
 import MessageOverlay from "./MessageOverlay"
 
-
 const Constants = {
   avatarSize: 40,
 }
@@ -33,7 +32,6 @@ const Message = ({
   }
 
   const handleLongPress = () => {
-    
     onLongPress(message, index)
   }
 
@@ -96,8 +94,9 @@ const Message = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 8,
+    paddingVertical: 7,
     gap: 8,
+    backgroundColor: "transparent",
   },
   overlayShown: {
     backgroundColor: "#ddd",

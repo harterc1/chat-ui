@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import chatService from "@/services/ChatService"
 import useInterval from "./useInterval"
 import useAuthContext from "@/contexts/auth/useAuthContext"
-import { getMessagesWithIndices, getMessageWithIndex } from "@/app/utils"
+import { getMessagesWithIndices, getMessageWithIndex } from "@/utils"
 
 type UseChatReturn = {
   messages: MessageWithIndex[],
