@@ -63,8 +63,8 @@ const Chat = () => {
       <FlatList
         style={{flex: 1}}
         data={messages}
-        renderItem={({item}) => <MessageView message={item} showHeader/>}
-        keyExtractor={(item) => item.id}
+        renderItem={({item}) => <MessageView message={item.message} showHeader={item.indexWithinGroup === 0} />}
+        keyExtractor={(item) => item.message.id}
         inverted
       />
       <View style={{ padding: 16, paddingBottom: insets.bottom }}>

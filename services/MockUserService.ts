@@ -63,7 +63,7 @@ class MockUserService {
   }
 
   #sendRandomMessage = () => {
-    console.log("sending...")
+    // console.log("sending...")
       const user = MOCK_USERS[Math.floor(Math.random() * MOCK_USERS.length)]!
       const text = MOCK_MESSAGE_TEXT[Math.floor(Math.random() * MOCK_MESSAGE_TEXT.length)]!
       chatService.send({ user, chatId: 0, text, })

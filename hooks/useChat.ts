@@ -4,30 +4,40 @@ import { useEffect, useRef, useState } from "react"
 import chatService from "@/services/ChatService"
 import useInterval from "./useInterval"
 
+type MessageWithIndex = {
+  message: Message
+  indexWithinGroup: number
+}
+
+const getMessageWithIndex = (message: Message, prevMessage?: MessageWithIndex): MessageWithIndex => {
+  let indexWithinGroup = 0
+  console.log("converting with message", message, "prevMessage", prevMessage)
+  if (prevMessage && message.user.username === prevMessage.message.user.username) {
+    indexWithinGroup = prevMessage.indexWithinGroup + 1
+  }
+  return { message, indexWithinGroup }
+}
+
+const convertToMessagesWithIndices = (messages: Message[], prevMessages: MessageWithIndex[]) : MessageWithIndex[] => {
+  let prevMessage = prevMessages[0]
+  let newMessages: MessageWithIndex[] = []
+  messages.forEach((message: Message) => {
+    prevMessage = getMessageWithIndex(message, prevMessage)
+    newMessages.push(prevMessage)
+  })
+  return newMessages
+}
+
 const useChat = (chatId: number) => {
-  const [messages, setMessages] = useState<Message[]>(chatService.fetchAllMessages({ chatId })) // TODO: pagination
+  const [messages, setMessages] = useState<MessageWithIndex[]>(
+    convertToMessagesWithIndices(chatService.fetchAllMessages({ chatId }), [])
+
+  )
   const messageQueue = useRef<Message[]>([])
 
-  // useEffect(() => {
-  //   // const onMessage = (message: Message) => newMessages.current.push(message)
-  //   const onMessage = ({ chatId: messageChatId, message }: {chatId: number, message: Message}) => {
-  //     if (messageChatId === chatId) {
-  //       // setMessages([message, ...messages])
-  //       newMessages.current.push(message)
-  //     }
-  //   }
-  //   chatService.on("message", onMessage)
-
-  //   return () => {
-  //     chatService.off("message", onMessage)
-  //   }
-  // }, [messages])
-
   useEffect(() => {
-    // const onMessage = (message: Message) => newMessages.current.push(message)
     const onMessage = ({ chatId: messageChatId, message }: {chatId: number, message: Message}) => {
       if (messageChatId === chatId) {
-        // setMessages([message, ...messages])
         messageQueue.current.push(message)
       }
     }
@@ -38,19 +48,10 @@ const useChat = (chatId: number) => {
     }
   }, [])
 
-  /**
-   * Deque messages at a fixed interval:
-   *  - Throttles how frequently the UI re-renders
-   *  - Allows the `useEffect` above to not have to unsubscribe/resubscribe
-   *    for message events on every message state update.
-   *  
-   *  Note: make sure the interval time specified is
-   *        longer than any animation durations in the UI to prevent
-   *        overlapping/conflicting animation behavior.
-   */
   useInterval(() => {
     if (messageQueue.current.length) {
-      setMessages([...messageQueue.current, ...messages])
+      const newMessages = convertToMessagesWithIndices(messageQueue.current, messages)
+      setMessages([...newMessages, ...messages])
       messageQueue.current = []
     }
   }, 3000)

@@ -11,7 +11,10 @@ const Message = ({
   showHeader: boolean
 }) => {
   return (
-    <View style={styles.container}>
+    <View style={[
+      styles.container,
+      !showHeader && styles.containerNoHeader
+    ]}>
       {showHeader && (
         <Image
           source={message.user.avatar}
@@ -40,15 +43,19 @@ const Message = ({
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
     flexDirection: "row",
     gap: 8,
+  },
+  containerNoHeader: {
+    paddingTop: 0,
   },
   text: {
 
   },
   textNoHeader: {
-    paddingLeft: 40,
+    paddingLeft: 40 + 8,
   },
   username: {
     fontWeight: "700",

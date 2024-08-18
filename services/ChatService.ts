@@ -8,7 +8,7 @@ class ChatService extends EventEmitter {
   send = ({ user, chatId, text }: { user: User, chatId: number, text: string }) => {
     const chat = this.#chats[chatId]
     if (chat) {
-      console.log(`sending message ${text} to chat ${chatId}...`)
+      // console.log(`sending message ${text} to chat ${chatId}...`)
       const message = {
         id: String(uuid.v4()),
         user,
