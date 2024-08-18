@@ -22,7 +22,6 @@ const Chat = () => {
   const onPressSend = () => {
     const strippedText = text.trim()
     if (strippedText) {
-      console.log("sending", strippedText)
       send(strippedText)
     }
     setText("")

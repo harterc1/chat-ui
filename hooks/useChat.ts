@@ -1,32 +1,10 @@
-import { Message } from "@/types.chat"
+import { Message, MessageWithIndex } from "@/types.chat"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import chatService from "@/services/ChatService"
 import useInterval from "./useInterval"
 import useAuthContext from "@/contexts/auth/useAuthContext"
-
-type MessageWithIndex = {
-  message: Message
-  indexWithinGroup: number
-}
-
-const getMessageWithIndex = (message: Message, prevMessage?: MessageWithIndex): MessageWithIndex => {
-  let indexWithinGroup = 0
-  if (prevMessage && message.user.username === prevMessage.message.user.username) {
-    indexWithinGroup = prevMessage.indexWithinGroup + 1
-  }
-  return { message, indexWithinGroup }
-}
-
-const getMessagesWithIndices = (messages: Message[], prevMessages: MessageWithIndex[]) : MessageWithIndex[] => {
-  let prevMessage = prevMessages[0]
-  let newMessages: MessageWithIndex[] = []
-  messages.forEach((message: Message) => {
-    prevMessage = getMessageWithIndex(message, prevMessage)
-    newMessages.push(prevMessage)
-  })
-  return newMessages
-}
+import { getMessagesWithIndices, getMessageWithIndex } from "@/app/utils"
 
 type UseChatReturn = {
   messages: MessageWithIndex[],
@@ -34,7 +12,6 @@ type UseChatReturn = {
 }
 
 const useChat = (chatId: number): UseChatReturn => {
-
   const user = useAuthContext()
 
   const [messages, setMessages] = useState<MessageWithIndex[]>(
@@ -48,6 +25,7 @@ const useChat = (chatId: number): UseChatReturn => {
   useEffect(() => {
     const onMessage = ({ chatId: messageChatId, message }: {chatId: number, message: Message}) => {
       if (messageChatId === chatId && user?.username !== message.user.username) {
+        // TODO: Test message order queueing/dequeueing
         messageQueue.current.push(message)
       }
     }
@@ -67,7 +45,6 @@ const useChat = (chatId: number): UseChatReturn => {
   }, 1000)
 
   const send = useCallback((text: string) => {
-    console.log("sending", text, "as", user)
     if (!user) { return }
 
     const message = chatService.createMessage({ user, text })

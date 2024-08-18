@@ -10,6 +10,11 @@ export type Message = {
   dateCreated: Date
 }
 
+export type MessageWithIndex = {
+  message: Message
+  indexWithinGroup: number
+}
+
 export type Chat = {
   messages: Message[]
 }
