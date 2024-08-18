@@ -58,9 +58,10 @@ const Message = ({
 
       {!!imageUrls.length && (
         <FlatList
-          style={[styles.imageContainer, styles.paddedLeft]}
+          contentContainerStyle={[styles.imageContainer, styles.paddedLeft]}
           data={imageUrls}
           horizontal
+          showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
             <Image
               source={item}
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     color: "#999",
   },
   imageContainer: {
-    paddingRight: 8,
+    paddingRight: 16,
   },
   image: {
     width: 160,
