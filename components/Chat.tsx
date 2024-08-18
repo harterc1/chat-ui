@@ -22,25 +22,23 @@ const Chat = () => {
     flatList.current?.scrollToOffset({ offset: 0 })
   }
 
-  // TODO: index not used
-  const handlePressMessage = (message: Message, index: number) => {
+  const handlePressMessage = (message: Message) => {
     if (message.id !== pressedMessageId) {
       setPressedMessageId(null)
     }
   }
 
-  const handleLongPressMessage = (message: Message, index: number) => {
+  const handleLongPressMessage = (message: Message) => {
     if (message.id !== pressedMessageId) {
       Haptics.selectionAsync()
       setPressedMessageId(message.id)
     }
   }
 
-  const renderItem = ({ item, index }: { item: MessageWithIndex, index: number }) => (
+  const renderItem = ({ item }: { item: MessageWithIndex }) => (
     <MessageView
       onPress={handlePressMessage}
       onLongPress={handleLongPressMessage}
-      index={index}
       message={item.message}
       showHeader={item.indexWithinGroup === 0}
       showOverlay={pressedMessageId === item.message.id}
@@ -71,6 +69,7 @@ const Chat = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
 })
 

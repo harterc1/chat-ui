@@ -21,11 +21,6 @@ class ChatService extends EventEmitter<EventTypes> {
     dateCreated: new Date,
   })
 
-  // send = ({ user, chatId, text }: { user: User, chatId: number, text: string }) => {
-  //   const message = this.createMessage({ user, text })
-  //   this.send({ chatId, message })
-  // }
-
   send = ({ chatId, message }: { chatId: number, message: Message }) => {
     const chat = this.#chats[chatId]
     if (chat) {

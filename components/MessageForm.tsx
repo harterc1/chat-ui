@@ -34,6 +34,7 @@ const MessageForm = ({
     <View style={styles.container}>
       <TextInput
         style={styles.textInput}
+        hitSlop={hitSlop}
         value={text}
         onChangeText={setText}
         multiline
@@ -65,6 +66,12 @@ const MessageForm = ({
   )
 }
 
+const Constants = {
+  textInputMinHeight: 36,
+}
+
+const hitSlop = (44 - Constants.textInputMinHeight) / 2
+
 const styles = StyleSheet.create({
   container: {
     gap: 8,
@@ -77,6 +84,7 @@ const styles = StyleSheet.create({
     padding: 8,
     marginHorizontal: 16,
     maxHeight: 160,
+    minHeight: Constants.textInputMinHeight,
   },
   imageContainer: {
     paddingLeft: 16,

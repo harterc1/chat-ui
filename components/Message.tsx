@@ -5,34 +5,28 @@ import useImageUrls from "@/hooks/useImageUrls"
 import Image from "./Image"
 import MessageOverlay from "./MessageOverlay"
 
-const Constants = {
-  avatarSize: 40,
-}
-
 const Message = ({
   message,
   showHeader,
-  index,
   onPress,
   onLongPress,
   showOverlay,
 }: {
   message: MessageType,
   showHeader: boolean,
-  index: number,
-  onPress: (message: MessageType, index: number) => void,
-  onLongPress: (message: MessageType, index: number) => void,
+  onPress: (message: MessageType) => void,
+  onLongPress: (message: MessageType) => void,
   showOverlay: boolean,
 }) => {
 
   const imageUrls = useImageUrls(message.text)
 
   const handlePress = () => {
-    onPress(message, index)
+    onPress(message)
   }
 
   const handleLongPress = () => {
-    onLongPress(message, index)
+    onLongPress(message)
   }
 
   return (
@@ -57,15 +51,15 @@ const Message = ({
           />
         )}
 
-        <View style={{ flex: 1, gap: 4 }}>
+        <View style={styles.rightContent}>
           {showHeader && (
-            <View style={{ flexDirection: "row", gap: 8 }}>
+            <View style={styles.userNameContainer}>
               <Text style={styles.username}>{ message.user.username }</Text>
               <Text style={styles.dateCreated}>{ dayjs(message.dateCreated).format("h:mm A") }</Text>
             </View>
           )}
 
-          <Text>
+          <Text style={styles.text}>
             { message.text }
           </Text>
         </View>
@@ -92,6 +86,10 @@ const Message = ({
   )
 }
 
+const Constants = {
+  avatarSize: 40,
+}
+
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 7,
@@ -99,7 +97,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   overlayShown: {
-    backgroundColor: "#ddd",
+    backgroundColor: "#e6e6e6",
   },
   paddedLeft: {
     paddingLeft: Constants.avatarSize + 24,
@@ -110,13 +108,25 @@ const styles = StyleSheet.create({
     gap: 8,
     flex: 1,
   },
+  rightContent: {
+    flex: 1,
+    gap: 4,
+  },
   avatar: {
     width: Constants.avatarSize,
     height: Constants.avatarSize,
     borderRadius: 8,
   },
+  userNameContainer: {
+    flexDirection: "row",
+    gap: 8,
+  },
   username: {
     fontWeight: "700",
+  },
+  text: {
+    fontSize: 15,
+    lineHeight: 20
   },
   dateCreated: {
     color: "#999",
@@ -129,7 +139,7 @@ const styles = StyleSheet.create({
     height: 160,
     borderRadius: 8,
     marginRight: 8
-  }
+  },
 })
 
 export default Message

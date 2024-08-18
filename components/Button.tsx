@@ -5,15 +5,6 @@ enum Variants {
   secondary = "secondary",
 }
 
-const Constants = {
-  minWidth: 72,
-  height: 32,
-}
-
-const minTapRect = 44
-const hitSlopVertical = (minTapRect - Constants.height) / 2
-const hitSlopHorizontal = (minTapRect - Constants.minWidth) / 2
-
 const Button = ({
   title,
   onPress,
@@ -51,6 +42,15 @@ const Button = ({
     </Text>
   </Pressable>
 )
+
+const Constants = {
+  minWidth: 80,
+  height: 36,
+}
+
+const minTapRect = 44
+const hitSlopVertical = (minTapRect - Constants.height) / 2
+const hitSlopHorizontal = (minTapRect - Constants.minWidth) / 2
 
 const styles = StyleSheet.create({
   base: {

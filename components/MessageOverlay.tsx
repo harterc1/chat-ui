@@ -22,7 +22,7 @@ const MessageOverlay = ({ message }: { message: Message }) => {
     >
       <IconButton
         onPress={() => {}}
-        name="thumb-up"
+        name="thumb-up-outline"
         accessibilityLabel="Like"
       />
 

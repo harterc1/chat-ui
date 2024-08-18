@@ -5,9 +5,8 @@ export const extractUrls = (text: string): string[] => {
   return Array.from(new Set(imageUrls || []))
 }
 
-export const extractImageUrls = async (text: string): Promise<string[]> => {
-  const urls = extractUrls(text)
-  const contentTypes = await Promise.all(urls.map(async (url) => {
+export const extractContentTypes = async (urls: string[]): Promise<string[]> => {
+  return Promise.all(urls.map(async (url) => {
     try {
       const response = await fetch(url, { method: "HEAD" })
       return response.headers.get("content-type") || ""
@@ -15,8 +14,6 @@ export const extractImageUrls = async (text: string): Promise<string[]> => {
       return ""
     }
   }))
-
-  return urls.filter((_, index) => contentTypes[index]?.startsWith("image"))
 }
 
 export const getMessageWithIndex = (message: Message, prevMessage?: MessageWithIndex): MessageWithIndex => {
