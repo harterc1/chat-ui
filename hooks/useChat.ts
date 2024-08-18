@@ -11,7 +11,6 @@ type MessageWithIndex = {
 
 const getMessageWithIndex = (message: Message, prevMessage?: MessageWithIndex): MessageWithIndex => {
   let indexWithinGroup = 0
-  console.log("converting with message", message, "prevMessage", prevMessage)
   if (prevMessage && message.user.username === prevMessage.message.user.username) {
     indexWithinGroup = prevMessage.indexWithinGroup + 1
   }
@@ -30,8 +29,10 @@ const convertToMessagesWithIndices = (messages: Message[], prevMessages: Message
 
 const useChat = (chatId: number) => {
   const [messages, setMessages] = useState<MessageWithIndex[]>(
-    convertToMessagesWithIndices(chatService.fetchAllMessages({ chatId }), [])
-
+    convertToMessagesWithIndices(
+      chatService.fetchAllMessages({ chatId }),
+      [],
+    )
   )
   const messageQueue = useRef<Message[]>([])
 
@@ -54,7 +55,7 @@ const useChat = (chatId: number) => {
       setMessages([...newMessages, ...messages])
       messageQueue.current = []
     }
-  }, 3000)
+  }, 1000)
 
   return messages
 }

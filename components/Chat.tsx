@@ -30,6 +30,15 @@ import MessageView from "./Message"
  * }
  */
 
+/**
+ * 
+ const uploadAll = async () => {
+    return await Promise.all(sizes.map(async (size, index) => {
+      return await upload(size, index);
+    }));
+  };
+ */
+
 const Chat = () => {
 
   const chatId = 0
@@ -42,11 +51,18 @@ const Chat = () => {
   const messages = useChat(chatId);
 
   const onPressCancel = () => {
+    const strippedText = text.trim()
+
+    console.log("found image urls", extractImageUrls(strippedText))
     setText("")
   }
 
   const onPressSend = () => {
     const strippedText = text.trim()
+
+    console.log("found image urls", extractImageUrls(strippedText))
+
+
     if (strippedText) {
       // chatService.send({ chatId, text: strippedText })
       // setMessages([text, ...messages]) 
@@ -73,6 +89,8 @@ const Chat = () => {
           value={text}
           onChangeText={setText}
           multiline
+          placeholder="Send a message"
+          placeholderTextColor="#999999"
         />
         <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
           <Button title="Cancel" onPress={onPressCancel} />
