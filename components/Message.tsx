@@ -1,9 +1,8 @@
 import { Message as MessageType } from "@/types.chat"
 import { StyleSheet, Text, View, FlatList } from "react-native"
-import { Image } from "expo-image"
 import dayjs from "dayjs"
-import { useEffect, useState } from "react"
-import { extractImageUrls } from "@/app/utils"
+import useImageUrls from "@/hooks/useImageUrls"
+import Image from "./Image"
 
 const Message = ({
   message,
@@ -13,15 +12,7 @@ const Message = ({
   showHeader: boolean
 }) => {
 
-  const [imageUrls, setImageUrls] = useState<string[]>([])
-
-  const evaluateImageUrls = async () => {
-    setImageUrls(await extractImageUrls(message.text))
-  }
-
-  useEffect(() => {
-    evaluateImageUrls()
-  }, [message.text])
+  const imageUrls = useImageUrls(message.text)
 
   return (
     <View style={[
@@ -65,9 +56,7 @@ const Message = ({
           renderItem={({ item }) => (
             <Image
               source={item}
-              placeholder={{ blurhash }}
               style={styles.image}
-              transition={250}
             />
           )}
           keyExtractor={(item) => item}
@@ -76,10 +65,6 @@ const Message = ({
     </View>
   )
 }
-
-const blurhash =
-  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
-
 
 const styles = StyleSheet.create({
   container: {

@@ -7,26 +7,9 @@ import MessageView from "./Message"
 import MessageForm from "./MessageForm"
 
 const Chat = () => {
-
   const insets = useSafeAreaInsets()
 
-  // TODO: store text in useRef -- check performance
-  // TODO: move text state to footer
-  // const [text, setText] = useState<string>("")
-
   const { send, messages} = useChat(0);
-
-  // const onPressCancel = () => {
-  //   setText("")
-  // }
-
-  // const onPressSend = () => {
-  //   const strippedText = text.trim()
-  //   if (strippedText) {
-  //     send(strippedText)
-  //   }
-  //   setText("")
-  // }
 
   const handleSubmit = (text: string) => {
     send(text)
@@ -45,7 +28,7 @@ const Chat = () => {
         keyExtractor={(item) => item.message.id}
         inverted
       />
-      <View style={{ padding: 16, paddingBottom: insets.bottom + 16 }}>
+      <View style={{ paddingTop: 16, paddingBottom: insets.bottom + 16 }}>
         <MessageForm onSubmit={handleSubmit} />
       </View>
     </KeyboardAvoidingView>

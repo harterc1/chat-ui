@@ -1,6 +1,8 @@
 import { useState } from "react"
-import { StyleSheet, TextInput, View } from "react-native"
+import { FlatList, StyleSheet, TextInput, View } from "react-native"
 import Button from "./Button"
+import useImageUrls from "@/hooks/useImageUrls"
+import Image from "./Image"
 
 const MessageForm = ({
   onSubmit,
@@ -9,6 +11,9 @@ const MessageForm = ({
 }) => {
 
   const [text, setText] = useState<string>("")
+
+
+  const imageUrls = useImageUrls(text)
 
   const onPressSend = () => {
     // TODO: not sure stripping should be here.. also we should strip tons of \n chars someplace
@@ -35,6 +40,23 @@ const MessageForm = ({
         placeholder="Send a message"
         placeholderTextColor="#999999"
       />
+
+      {!!imageUrls.length && (
+        <FlatList
+          contentContainerStyle={styles.imageContainer}
+          data={imageUrls}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <Image
+              source={item}
+              style={styles.image}
+            />
+          )}
+          keyExtractor={(item) => item}
+        />
+      )}
+
       <View style={styles.buttonContainer}>
         <Button title="Cancel" onPress={onPressCancel} variant="secondary" disabled={disabled} />
         <Button title="Send" onPress={onPressSend} disabled={disabled} />
@@ -53,9 +75,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     padding: 8,
+    marginHorizontal: 16,
+    maxHeight: 160,
+  },
+  imageContainer: {
+    paddingLeft: 16,
+    paddingRight: 8,
+  },
+  image: {
+    width: 72,
+    height: 72,
+    borderRadius: 8,
+    marginRight: 8
   },
   buttonContainer: {
     flexDirection: "row",
+    paddingHorizontal: 16,
     gap: 8,
     justifyContent: "flex-end"
   }

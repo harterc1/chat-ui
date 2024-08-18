@@ -14,6 +14,7 @@ const minTapRect = 44
 const hitSlopVertical = (minTapRect - Constants.height) / 2
 const hitSlopHorizontal = (minTapRect - Constants.minWidth) / 2
 
+// TODO: pressed styling
 const Button = ({
   title,
   onPress,
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
     borderColor: "#cccc",
     borderStyle: "solid",
     borderWidth: 1,
+    backgroundColor: "white",
   },
   disabled: {
     opacity: 0.4,

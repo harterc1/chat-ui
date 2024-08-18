@@ -1,3 +1,13 @@
+/*
+ TEST INPUT:
+
+ https://i.ebayimg.com/images/g/ZL8AAOSwmbRjZNMO/s-l1200.webp
+ https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6IO6cYbTqsVXQKnpJRQ8B3QsBb-vEmyqNiQ&s
+ https://t3.ftcdn.net/jpg/02/95/44/22/360_F_295442295_OXsXOmLmqBUfZreTnGo9PREuAPSLQhff.jpg
+ https://thumbs.dreamstime.com/b/funny-face-baby-27701492.jpg
+
+*/
+
 import { User } from "./types.chat"
 
 export const MOCK_APP_USER: User = {
@@ -31,7 +41,7 @@ export const MOCK_MESSAGE_TEXT = [
   "Anyone know a good bench workout? I've been doing 5x5, but I think I'm plateauing... 😮‍💨",
   "🏈 Gameday boys! 🏈",
   "Argh I can't wait for the weekend.",
-  "Join the Sleeper app before football season starts guys. I need some competition. 💪",
+  "Join before football season starts guys. I need some competition. 💪",
   "Don't forget to stretch",
   "Is it Friday yet?",
   "Anyone there?",
