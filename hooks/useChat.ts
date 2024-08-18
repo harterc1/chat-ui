@@ -5,7 +5,7 @@ import chatService from "@/services/ChatService"
 import useInterval from "./useInterval"
 
 const useChat = (chatId: number) => {
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<Message[]>(chatService.fetchAllMessages({ chatId })) // TODO: pagination
   const messageQueue = useRef<Message[]>([])
 
   // useEffect(() => {

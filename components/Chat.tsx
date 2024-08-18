@@ -3,6 +3,7 @@ import { Button, FlatList, KeyboardAvoidingView, Platform, PlatformColor, StyleS
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 
 import useChat from "@/hooks/useChat"
+import MessageView from "./Message"
 
 
 /**
@@ -62,12 +63,17 @@ const Chat = () => {
       <FlatList
         style={{flex: 1}}
         data={messages}
-        renderItem={({item}) => <Text>{ item.text }</Text>}
+        renderItem={({item}) => <MessageView message={item} showHeader/>}
         keyExtractor={(item) => item.id}
         inverted
       />
       <View style={{ padding: 16, paddingBottom: insets.bottom }}>
-        <TextInput style={styles.textInput} value={text} onChangeText={setText} />
+        <TextInput
+          style={styles.textInput}
+          value={text}
+          onChangeText={setText}
+          multiline
+        />
         <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
           <Button title="Cancel" onPress={onPressCancel} />
           <Button title="Send" onPress={onPressSend} />

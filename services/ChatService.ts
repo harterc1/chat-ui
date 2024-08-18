@@ -20,7 +20,7 @@ class ChatService extends EventEmitter {
     }
   }
 
-  fetchMessages = ({ chatId }: { chatId: number }): Message[] => {
+  fetchAllMessages = ({ chatId }: { chatId: number }): Message[] => {
     return this.#chats[chatId]?.messages || []
   }
 }
