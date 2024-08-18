@@ -40,6 +40,7 @@ const MessageForm = ({
         multiline
         placeholder="Send a message"
         placeholderTextColor="#999999"
+        keyboardType="twitter"
       />
 
       {!!imageUrls.length && (
@@ -85,6 +86,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     maxHeight: 160,
     minHeight: Constants.textInputMinHeight,
+    fontSize: 15,
+    lineHeight: 20
   },
   imageContainer: {
     paddingLeft: 16,

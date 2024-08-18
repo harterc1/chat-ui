@@ -12,7 +12,12 @@ An on-device chat simulation showcasing an example of a chat UI implemented with
 `npm install`
 
 ##### Start the app
+
+In dev mode:
 `npm start`
+
+In production mode (should have better performance):
+`npx expo start --no-dev`
 
 In the output, you'll find options to open the app in a
 

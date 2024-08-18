@@ -2,7 +2,7 @@ import chatService from "./ChatService"
 import { MOCK_MESSAGE_TEXT, MOCK_USERS } from "@/mockData"
 
 class MockUserService {
-  constructor() {
+  start = () => {
     let count = 0
     while (count < 500) {
       this.#sendRandomMessage()
@@ -25,4 +25,4 @@ class MockUserService {
   }
 }
 
-export default MockUserService
+export default new MockUserService

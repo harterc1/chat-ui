@@ -1,10 +1,15 @@
-import { View } from "react-native"
+import { Alert, View } from "react-native"
 import IconButton from "./IconButton"
 import useAuthContext from "@/contexts/auth/useAuthContext"
 import { Message } from "@/types.chat"
 
 const MessageOverlay = ({ message }: { message: Message }) => {
   const user = useAuthContext()
+
+  const handlePress = () => {
+    Alert.alert("Not Implemented", "I ran out of time on this feature")
+  }
+
   return (
     <View
       style={{
@@ -21,7 +26,7 @@ const MessageOverlay = ({ message }: { message: Message }) => {
       }}
     >
       <IconButton
-        onPress={() => {}}
+        onPress={handlePress}
         name="thumb-up-outline"
         accessibilityLabel="Like"
       />
@@ -29,12 +34,12 @@ const MessageOverlay = ({ message }: { message: Message }) => {
       {user?.username === message.user.username && (
         <>
           <IconButton
-            onPress={() => {}}
+            onPress={handlePress}
             name="square-edit-outline"
             accessibilityLabel="Edit"
           />
           <IconButton
-            onPress={() => {}}
+            onPress={handlePress}
             name="trash-can-outline"
             accessibilityLabel="Delete"
           />
@@ -42,7 +47,7 @@ const MessageOverlay = ({ message }: { message: Message }) => {
       )}
       
       <IconButton
-        onPress={() => {}}
+        onPress={handlePress}
         name="reply-outline"
         accessibilityLabel="Reply"
       />

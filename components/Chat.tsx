@@ -53,7 +53,7 @@ const Chat = () => {
     >
       <FlatList
         ref={flatList}
-        maintainVisibleContentPosition={{ minIndexForVisible: 0, autoscrollToTopThreshold: 20 }}
+        maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
         data={messages}
         renderItem={renderItem}
         keyExtractor={(item) => item.message.id}
