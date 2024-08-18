@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import useChat from "@/hooks/useChat"
 import MessageView from "./Message"
+import MessageForm from "./MessageForm"
 
 const Chat = () => {
 
@@ -11,27 +12,31 @@ const Chat = () => {
 
   // TODO: store text in useRef -- check performance
   // TODO: move text state to footer
-  const [text, setText] = useState<string>("")
+  // const [text, setText] = useState<string>("")
 
   const { send, messages} = useChat(0);
 
-  const onPressCancel = () => {
-    setText("")
-  }
+  // const onPressCancel = () => {
+  //   setText("")
+  // }
 
-  const onPressSend = () => {
-    const strippedText = text.trim()
-    if (strippedText) {
-      send(strippedText)
-    }
-    setText("")
+  // const onPressSend = () => {
+  //   const strippedText = text.trim()
+  //   if (strippedText) {
+  //     send(strippedText)
+  //   }
+  //   setText("")
+  // }
+
+  const handleSubmit = (text: string) => {
+    send(text)
   }
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.select({ ios: "padding" })}
-      keyboardVerticalOffset={insets.bottom + 50}
+      keyboardVerticalOffset={insets.bottom + 20}
     >
       <FlatList
         style={{flex: 1}}
@@ -40,19 +45,8 @@ const Chat = () => {
         keyExtractor={(item) => item.message.id}
         inverted
       />
-      <View style={{ padding: 16, paddingBottom: insets.bottom }}>
-        <TextInput
-          style={styles.textInput}
-          value={text}
-          onChangeText={setText}
-          multiline
-          placeholder="Send a message"
-          placeholderTextColor="#999999"
-        />
-        <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-          <Button title="Cancel" onPress={onPressCancel} />
-          <Button title="Send" onPress={onPressSend} />
-        </View>
+      <View style={{ padding: 16, paddingBottom: insets.bottom + 16 }}>
+        <MessageForm onSubmit={handleSubmit} />
       </View>
     </KeyboardAvoidingView>
   )
