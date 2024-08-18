@@ -1,8 +1,10 @@
 import { Message as MessageType } from "@/types.chat"
-import { StyleSheet, Text, View, FlatList } from "react-native"
+import { StyleSheet, Text, View, FlatList, Pressable } from "react-native"
 import dayjs from "dayjs"
 import useImageUrls from "@/hooks/useImageUrls"
 import Image from "./Image"
+import MessageOverlay from "./MessageOverlay"
+
 
 const Constants = {
   avatarSize: 40,
@@ -11,19 +13,39 @@ const Constants = {
 const Message = ({
   message,
   showHeader,
+  index,
+  onPress,
+  onLongPress,
+  showOverlay,
 }: {
   message: MessageType,
-  showHeader: boolean
+  showHeader: boolean,
+  index: number,
+  onPress: (message: MessageType, index: number) => void,
+  onLongPress: (message: MessageType, index: number) => void,
+  showOverlay: boolean,
 }) => {
 
   const imageUrls = useImageUrls(message.text)
 
+  const handlePress = () => {
+    onPress(message, index)
+  }
+
+  const handleLongPress = () => {
+    
+    onLongPress(message, index)
+  }
+
   return (
-    <View style={[
-      styles.container,
-      !showHeader && styles.containerNoHeader
-    ]}>
-      
+    <Pressable
+      style={[
+        styles.container,
+        showOverlay && styles.overlayShown,
+      ]}
+      onPress={handlePress}
+      onLongPress={handleLongPress}
+    >
       <View
         style={[
           styles.content,
@@ -66,18 +88,19 @@ const Message = ({
           keyExtractor={(item) => item}
         />
       )}
-    </View>
+
+      {showOverlay && <MessageOverlay message={message} />}
+    </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingVertical: 8,
     gap: 8,
   },
-  containerNoHeader: {
-    paddingTop: 0,
+  overlayShown: {
+    backgroundColor: "#ddd",
   },
   paddedLeft: {
     paddingLeft: Constants.avatarSize + 24,

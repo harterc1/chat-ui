@@ -1,32 +1,67 @@
-import { useState } from "react"
-import { Button, FlatList, KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from "react-native"
+import { useRef, useState } from "react"
+import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import useChat from "@/hooks/useChat"
 import MessageView from "./Message"
 import MessageForm from "./MessageForm"
+import { Message, MessageWithIndex } from "@/types.chat"
+import * as Haptics from 'expo-haptics';
 
 const Chat = () => {
+  const flatList = useRef<FlatList>(null)
+
   const insets = useSafeAreaInsets()
 
   const { send, messages} = useChat(0);
 
+  const [pressedMessage, setPressedMessage] = useState<Message | null>(null)
+
+  const handleScrollBeginDrag = () => setPressedMessage(null)
+
   const handleSubmit = (text: string) => {
     send(text)
+    flatList.current?.scrollToOffset({ offset: 0 })
   }
+
+  const handlePressMessage = (message: Message, index: number) => {
+    if (message.id !== pressedMessage?.id) {
+      setPressedMessage(null)
+    }
+  }
+
+  const handleLongPressMessage = (message: Message, index: number) => {
+    if (message.id !== pressedMessage?.id) {
+      Haptics.selectionAsync()
+      setPressedMessage(message)
+    }
+  }
+
+  const renderItem = ({ item, index }: { item: MessageWithIndex, index: number }) => (
+    <MessageView
+      onPress={handlePressMessage}
+      onLongPress={handleLongPressMessage}
+      index={index}
+      message={item.message}
+      showHeader={item.indexWithinGroup === 0}
+      showOverlay={pressedMessage?.id === item.message.id}
+    />
+  )
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={styles.container}
       behavior={Platform.select({ ios: "padding" })}
       keyboardVerticalOffset={insets.bottom + 20}
     >
       <FlatList
-        style={{flex: 1}}
+        ref={flatList}
+        maintainVisibleContentPosition={{ minIndexForVisible: 0, autoscrollToTopThreshold: 20 }}
         data={messages}
-        renderItem={({item}) => <MessageView message={item.message} showHeader={item.indexWithinGroup === 0} />}
+        renderItem={renderItem}
         keyExtractor={(item) => item.message.id}
-        inverted
+        inverted 
+        onScrollBeginDrag={handleScrollBeginDrag}
       />
       <View style={{ paddingTop: 16, paddingBottom: insets.bottom + 16 }}>
         <MessageForm onSubmit={handleSubmit} />
@@ -36,12 +71,9 @@ const Chat = () => {
 }
 
 const styles = StyleSheet.create({
-  textInput: {
-    borderColor: "#cccccc",
-    borderStyle: "solid",
-    borderWidth: 1,
-    padding: 8,
-  }
+  container: {
+    flex: 1,
+  },
 })
 
 export default Chat

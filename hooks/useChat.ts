@@ -25,8 +25,7 @@ const useChat = (chatId: number): UseChatReturn => {
   useEffect(() => {
     const onMessage = ({ chatId: messageChatId, message }: {chatId: number, message: Message}) => {
       if (messageChatId === chatId && user?.username !== message.user.username) {
-        // TODO: Test message order queueing/dequeueing
-        messageQueue.current.push(message)
+        messageQueue.current.unshift(message)
       }
     }
     chatService.on("message", onMessage)
