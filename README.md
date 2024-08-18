@@ -28,3 +28,7 @@ In the output, you'll find options to open the app in a
 ## Contributing
 
 The app's entry point is [App.tsx](/App.tsx).
+
+## Turning off the mock users
+
+Open [App.tsx](/App.tsx) and remove the [`mockUserService.start()` line](https://github.com/harterc1/chat-ui/blob/master/App.tsx#L6).
