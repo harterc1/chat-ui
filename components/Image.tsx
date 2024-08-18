@@ -6,7 +6,7 @@ const blurhash =
 const Image = (props: ImageProps) => (
   <ExpoImage
     placeholder={blurhash}
-    transition={250}
+    transition={100}
     {...props}
   />
 )

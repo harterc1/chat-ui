@@ -4,6 +4,10 @@ import dayjs from "dayjs"
 import useImageUrls from "@/hooks/useImageUrls"
 import Image from "./Image"
 
+const Constants = {
+  avatarSize: 40,
+}
+
 const Message = ({
   message,
   showHeader,
@@ -29,7 +33,7 @@ const Message = ({
         {showHeader && (
           <Image
             source={message.user.avatar}
-            style={{ width: 40, height: 40, borderRadius: 8}}
+            style={styles.avatar}
           />
         )}
 
@@ -76,13 +80,18 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   paddedLeft: {
-    paddingLeft: 40 + 24,
+    paddingLeft: Constants.avatarSize + 24,
   },
   content: {
     flexDirection: "row",
     paddingHorizontal: 16,
     gap: 8,
     flex: 1,
+  },
+  avatar: {
+    width: Constants.avatarSize,
+    height: Constants.avatarSize,
+    borderRadius: 8,
   },
   username: {
     fontWeight: "700",
