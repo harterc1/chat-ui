@@ -1,4 +1,4 @@
-import { startTransition, useRef, useState } from "react"
+import {  useRef, useState } from "react"
 import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -22,6 +22,7 @@ const Chat = () => {
     flatList.current?.scrollToOffset({ offset: 0 })
   }
 
+  // TODO: index not used
   const handlePressMessage = (message: Message, index: number) => {
     if (message.id !== pressedMessageId) {
       setPressedMessageId(null)

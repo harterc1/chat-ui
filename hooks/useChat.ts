@@ -11,6 +11,18 @@ type UseChatReturn = {
   send: (text: string) => void
 }
 
+/**
+ * Allows a view to observe messages coming in from our `ChatService`.
+ * 
+ * - Throttles messages to avoid re-render bursts
+ * - Instantly stores the app user's for immediate user feedback
+ * - Encapsulates each message with an `indexWithinGroup` to allow
+ *    the UI to determine which messages are to be rendered with headers (the sender's avatar, username, etc.)
+ * 
+ * Returns:
+ * - A `send` function tied to the current app user
+ * - The `messages` array for the specified chat
+ */
 const useChat = (chatId: number): UseChatReturn => {
   const user = useAuthContext()
 

@@ -14,7 +14,6 @@ const minTapRect = 44
 const hitSlopVertical = (minTapRect - Constants.height) / 2
 const hitSlopHorizontal = (minTapRect - Constants.minWidth) / 2
 
-// TODO: pressed styling
 const Button = ({
   title,
   onPress,
@@ -35,11 +34,12 @@ const Button = ({
       right: hitSlopHorizontal,
     }}
     disabled={disabled}
-    style={[
+    style={({ pressed }) => ([
       styles.base,
       styles[variant],
+      pressed && pressedStyles[variant],
       disabled && styles.disabled,
-    ]}
+    ])}
   >
     <Text
       style={[
@@ -69,8 +69,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: "white",
   },
+  pressed: {
+    backgroundColor: "#ccc",
+  },
   disabled: {
     opacity: 0.4,
+  },
+})
+
+const pressedStyles = StyleSheet.create({
+  primary: {
+    backgroundColor: "#555",
+  },
+  secondary: {
+    backgroundColor: "#eeeeee",
   },
 })
 
